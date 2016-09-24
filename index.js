@@ -52,6 +52,9 @@ app.get('/audience', (req, res) => {
 
 app.post('/go', (req, res) => {
   pusher.trigger('presence-literate-giggle', 'client-finished-speaking', {i:-1});
+  missingPerson = setTimeout(() => {
+    pusher.trigger('presence-literate-giggle', 'client-finished-speaking', {i:0});
+  }, 5000);
   res.send(200);
 });
 
@@ -66,6 +69,7 @@ app.post('/pusher/auth', (req, res) => {
 });
 
 app.post('/channelhook', (req, res) => {
+  console.log(req.body)
   const webhook = pusher.webhook({
     rawBody: JSON.stringify(req.body),
     headers: req.headers
@@ -86,12 +90,11 @@ app.post('/channelhook', (req, res) => {
       if(e.name === 'member_removed') {
         audience = audience.filter(a => a !== e.user_id);
       }
-      if(e.name === 'client-finished-speaking') {
+      if(e.event === 'client-finished-speaking') {
         clearTimeout(missingPerson);
+        let data = JSON.parse(e.data);
         if(parseInt(data.i) < currentPosition) {
-          console.log('Setting up a timeout')
           missingPerson = setTimeout(() => {
-            console.log('Skipping person')
             pusher.trigger('presence-literate-giggle', 'client-finished-speaking', {i:parseInt(data.i) + 1});
           }, 5000);
         }
