@@ -26,12 +26,11 @@
 
 <h1>Choose your s-word</h1>
 
-<button>One</button>
-<button>Two</button>
-<button>Three</button>
+<button id="ready">{{word.word}}</button>
 
 
 <div id="pusher" data-key="{{PUSHKEY}}" data-thisurl="{{THIS_URL}}"></div>
+<div id="word" data-word="{{word.word}}" data-index="{{word.index}}"></div>
 
 <script type="text/javascript">
   // pusher
@@ -48,6 +47,35 @@
   // Once subscribed, store the UID
   channel.bind('pusher:subscription_succeeded', function() {
       meId = channel.members.me.id;
+  });
+
+  channel.bind('client-finished-speaking', function(data) {
+    if(parseInt(data.i) + 1 == document.getElementById('word').dataset.index) {
+      sayWord(document.getElementById('word').dataset.word);
+    }
+  });
+
+  function getRandom(start, end) {
+    return Math.floor(Math.random() * (end - start)) + start  
+  }
+
+  function sayWord(word) {
+    var msg = new SpeechSynthesisUtterance(word);
+    var voices = window.speechSynthesis.getVoices();
+    console.log(voices)
+    msg.voice = voices[getRandom(0, voices.length)];
+    msg.onend = function() {
+      finishedSpeaking();
+    }
+    window.speechSynthesis.speak(msg);
+  }
+
+  function finishedSpeaking() {
+    channel.trigger('client-finished-speaking', {i:document.getElementById('word').dataset.index});
+  }
+
+  document.getElementById('ready').addEventListener('click', function() {
+    channel.trigger('client-ready', {id:meId});
   });
 
 </script>

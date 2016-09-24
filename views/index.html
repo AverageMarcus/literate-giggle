@@ -31,7 +31,7 @@
   <div class="joined-dots">
   </div>
 
-  <button>Ready</button>
+  <button id="ready">Ready</button>
 
 
   <p class="info creds">Made by <a href="http://twitter.com/rumyra">@rumyra</a> and <a href="http://twitter.com/">Marcus etc...</p>
@@ -84,8 +84,12 @@
   }
 
   function readyMember(id) {
-    document.querySelector(`[data-id='${id}']`).addClass('ready');
+    document.querySelector(`[data-id='${id}']`).classList.add('ready');
   }
+
+  document.getElementById('ready').addEventListener('click', function() {
+    channel.trigger('client-finished-speaking', {i:-1});
+  })
 
 </script>
 

@@ -10,8 +10,9 @@ const htmling = require('htmling');
 const Pusher = require('pusher');
 
 const poem = require('./poem.json');
-const channel = 'presence-literate-giggle';
+const channelName = 'presence-literate-giggle';
 let audience = [];
+let currentPosition = 0;
 
 app.use(express.static('public'));
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -21,15 +22,16 @@ app.engine('html', htmling.express(__dirname + '/views/', {watch:true}));
 app.set('view engine', 'html');
 
 // pusher stuff
-var pusher = new Pusher({
+let pusher = new Pusher({
   appId: process.env.PUSHID,
   key: process.env.PUSHKEY,
-  secret: process.env.PUSHSEC
+  secret: process.env.PUSHSEC,
+  cluster: 'eu'
 });
 pusher.port = 443;
 
-
 app.get('/', (req, res) => {
+  currentPosition = 0;
   var thisUrl = req.protocol + '://' + req.get('host');
   req.THIS_URL = thisUrl;
   req.JOIN_URL = thisUrl+'/audience';
@@ -42,7 +44,14 @@ app.get('/audience', (req, res) => {
   var thisUrl = req.protocol + '://' + req.get('host');
   req.THIS_URL = thisUrl;
   req.PUSHKEY = process.env.PUSHKEY;
+  req.word = { word: poem[currentPosition], index: currentPosition };
+  currentPosition++;
   res.render('audience', req);
+});
+
+app.post('/go', (req, res) => {
+  pusher.trigger('presence-literate-giggle', 'client-finished-speaking', {i:-1});
+  res.send(200);
 });
 
 app.post('/pusher/auth', (req, res) => {
@@ -69,7 +78,7 @@ app.get('/channelhook', (req, res) => {
   }
 
   webhook.getEvents().forEach( e => {
-    if(e.channel === channel) {
+    if(e.channel === channelName) {
       if(e.name === 'member_added') {
         audience.add(e.user_id);
       }
