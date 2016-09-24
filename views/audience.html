@@ -67,8 +67,8 @@
     var voice = englishVoices[getRandom(0,englishVoices.length)];
     var options = {
         pitch: Math.random() * 0.8 + 0.6,
-	rate: Math.random() * 0.8 + 0.6,
-	onend: finishedSpeaking
+        rate: Math.random() * 0.8 + 0.6,
+        onend: finishedSpeaking
     } 
     responsiveVoice.speak(word, voice.name, options);
   }
@@ -77,14 +77,16 @@
     channel.trigger('client-finished-speaking', {i:document.getElementById('word').dataset.index});
   }
 
-  document.getElementById('ready1').addEventListener('click', function() {
+  document.getElementById('ready1').addEventListener('click', function(event) {
+    responsiveVoice.clickEvent(event);
     myWord = document.getElementById('word').dataset.word1;
     channel.trigger('client-ready', {id:meId});
     document.getElementById('ready1').classList.add('selected');
     document.getElementById('ready2').attributes.disabled = 'disabled';
   });
-  document.getElementById('ready2').addEventListener('click', function() {
-    myWord = document.getElementById('word').dataset.word1;
+  document.getElementById('ready2').addEventListener('click', function(event) {
+    responsiveVoice.clickEvent(event);
+    myWord = document.getElementById('word').dataset.word2;
     channel.trigger('client-ready', {id:meId});
     document.getElementById('ready2').classList.add('selected');
     document.getElementById('ready1').attributes.disabled = 'disabled';

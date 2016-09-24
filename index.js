@@ -13,6 +13,7 @@ const poem = require('./poem.json');
 const channelName = 'presence-literate-giggle';
 let audience = [];
 let currentPosition = 0;
+let missingPerson;
 
 app.use(express.static('public'));
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -64,7 +65,7 @@ app.post('/pusher/auth', (req, res) => {
   );
 });
 
-app.get('/channelhook', (req, res) => {
+app.post('/channelhook', (req, res) => {
   const webhook = pusher.webhook({
     rawBody: JSON.stringify(req.body),
     headers: req.headers
@@ -80,10 +81,20 @@ app.get('/channelhook', (req, res) => {
   webhook.getEvents().forEach( e => {
     if(e.channel === channelName) {
       if(e.name === 'member_added') {
-        audience.add(e.user_id);
+        audience.push(e.user_id);
       }
       if(e.name === 'member_removed') {
         audience = audience.filter(a => a !== e.user_id);
+      }
+      if(e.name === 'client-finished-speaking') {
+        clearTimeout(missingPerson);
+        if(parseInt(data.i) < currentPosition) {
+          console.log('Setting up a timeout')
+          missingPerson = setTimeout(() => {
+            console.log('Skipping person')
+            pusher.trigger('presence-literate-giggle', 'client-finished-speaking', {i:parseInt(data.i) + 1});
+          }, 5000);
+        }
       }
     }
   });
