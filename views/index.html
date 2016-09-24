@@ -28,7 +28,8 @@
 
   <h1>Come tell a story</h1>
 
-  <div class="joined-dots"><i class="ready"></i><i></i><i></i></div>
+  <div class="joined-dots">
+  </div>
 
   <button>Ready</button>
 
@@ -47,7 +48,7 @@
       console.log("Pusher's current state is " + states.current);
   });
   // subscribe to channel
-  var channel = pusher.subscribe('presence-story_channel');
+  var channel = pusher.subscribe('presence-literate-giggle');
   channel.bind('pusher:subscription_succeeded', function(members) {
 
     members.each(function(member){
@@ -55,16 +56,37 @@
       if(member.id === members.myID) {
         return
       } else {
-       
-      }
-
-      // check that there is a client index on the user data
-      if(typeof(member.info.clientIndex) == 'undefined'){
-        return console.error("no clientIndex provided")
+       addMember(member.id, member.info);
       }
     })
   })
-  
+
+  channel.bind('pusher:member_added', function(member) {
+    addMember(member.id, member.info);
+  });
+
+  channel.bind('pusher:member_removed', function(member) {
+    removeMember(member.id);
+  });
+
+  channel.bind('client-ready', function(member) {
+    readyMember(member.id);
+  });
+
+  function addMember(id, info) {
+    var user = document.createElement('i');
+    user.dataset.id = id;
+    document.querySelector('.joined-dots').appendChild(user);
+  }
+
+  function removeMember(id) {
+    document.querySelector(`[data-id='${id}']`).remove();
+  }
+
+  function readyMember(id) {
+    document.querySelector(`[data-id='${id}']`).addClass('ready');
+  }
+
 </script>
 
 </body>
