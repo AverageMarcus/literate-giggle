@@ -47,10 +47,11 @@
   pusher.connection.bind('state_change', function(states) {
       console.log("Pusher's current state is " + states.current);
   });
+  var myId;
   // subscribe to channel
   var channel = pusher.subscribe('presence-literate-giggle');
   channel.bind('pusher:subscription_succeeded', function(members) {
-
+    myId = members.myID;
     members.each(function(member){
       // don't include ourself
       if(member.id === members.myID) {
@@ -62,7 +63,9 @@
   })
 
   channel.bind('pusher:member_added', function(member) {
-    addMember(member.id, member.info);
+    if(member.id !== myId) {
+      addMember(member.id, member.info);
+    }
   });
 
   channel.bind('pusher:member_removed', function(member) {
