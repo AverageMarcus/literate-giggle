@@ -9,9 +9,23 @@ const bodyParser = require('body-parser');
 const htmling = require('htmling');
 const Pusher = require('pusher');
 
+const poem = require('./poem.json');
+
 app.use(express.static('public'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+
+app.engine('html', htmling.express(__dirname + '/views/', {watch:true}));
+app.set('view engine', 'html');
+
+// pusher stuff
+var pusher = new Pusher({
+  appId: process.env.PUSHID,
+  key: process.env.PUSHKEY,
+  secret: process.env.PUSHSEC
+});
+pusher.port = 443;
+
 
 app.get('/', (req, res) => {
   var thisUrl = req.protocol + '://' + req.get('host');
@@ -42,15 +56,3 @@ app.post('/pusher/auth', (req, res) => {
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}!`);
 });
-
-app.engine('html', htmling.express(__dirname + '/views/', {watch:true}));
-app.set('view engine', 'html');
-
-// pusher stuff
-var pusher = new Pusher({
-  appId: process.env.PUSHID,
-  key: process.env.PUSHKEY,
-  secret: process.env.PUSHSEC
-});
-pusher.port = 443;
-
