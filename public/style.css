@@ -1,1 +1,34 @@
 * {padding:0px; margin:0px; border:none;}
+
+body {
+  padding:2vh 2vw;
+  background-color: #222;
+  color: #efefef;
+  font-family: cursive;
+  font-size: 100%;
+  text-align: center;
+}
+
+h1, p, button {padding:0.5em;}
+
+button {
+  display:block; margin:0px auto;
+  padding:0.5em; width: 40vw;
+  background-color: purple;
+  border-radius: 20px;
+  font-family: cursive;
+  font-size: 2em; color:#efefef;
+}
+
+p.info {}
+
+.page-index {}
+.page-index h1 {font-size: 2.6em;}
+.joined-dots {height:60vh; display:flex; justify-content: space-around;}
+.joined-dots i {display:block; height:30px; width:30px; border-radius:20px; background-color:red; margin:0.2em;}
+.joined-dots i.ready {background-color:green;}
+
+.page-audience {width:300px; margin:0px auto;}
+.page-audience button {
+  width:240px; margin:0.5em auto;
+}
