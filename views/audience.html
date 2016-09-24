@@ -27,11 +27,12 @@
 <h1>Choose your s-word</h1>
 <h2>Turn your sound up!</h2>
 
-<button id="ready">{{word.word}}</button>
+<button id="ready1">{{word.word1}}</button>
+<button id="ready2">{{word.word2}}</button>
 
 
 <div id="pusher" data-key="{{PUSHKEY}}" data-thisurl="{{THIS_URL}}"></div>
-<div id="word" data-word="{{word.word}}" data-index="{{word.index}}"></div>
+<div id="word" data-word1="{{word.word1}}" data-word2="{{word.word2}}" data-index="{{word.index}}"></div>
 
 <script type="text/javascript">
   // pusher
@@ -44,6 +45,7 @@
   // subscribe to channel
   var channel = pusher.subscribe('presence-literate-giggle');
   var meId;
+  var myWord;
   
   // Once subscribed, store the UID
   channel.bind('pusher:subscription_succeeded', function() {
@@ -51,8 +53,8 @@
   });
 
   channel.bind('client-finished-speaking', function(data) {
-    if(parseInt(data.i) + 1 == document.getElementById('word').dataset.index) {
-      sayWord(document.getElementById('word').dataset.word);
+    if(parseInt(data.i) + 1 == document.getElementById('word').dataset.index && myWord) {
+      sayWord(myWord);
     }
   });
 
@@ -75,7 +77,12 @@
     channel.trigger('client-finished-speaking', {i:document.getElementById('word').dataset.index});
   }
 
-  document.getElementById('ready').addEventListener('click', function() {
+  document.getElementById('ready1').addEventListener('click', function() {
+    myWord = document.getElementById('word').dataset.word1;
+    channel.trigger('client-ready', {id:meId});
+  });
+  document.getElementById('ready1').addEventListener('click', function() {
+    myWord = document.getElementById('word').dataset.word1;
     channel.trigger('client-ready', {id:meId});
   });
 
