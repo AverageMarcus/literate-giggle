@@ -19,6 +19,7 @@
   <link type="text/css" href="style.css" rel="stylesheet" media="screen" />
   
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pusher/3.0.0/pusher.min.js"></script>
+  <script src="http://code.responsivevoice.org/responsivevoice.js"></script>
 </head>
 
 <body>
@@ -58,18 +59,18 @@
   });
 
   function getRandom(start, end) {
-    return Math.floor(Math.random() * (end - start)) + start  
+    return Math.floor(Math.random() * (end - start)) + start; 
   }
 
   function sayWord(word) {
-    var msg = new SpeechSynthesisUtterance(word);
-    var voices = window.speechSynthesis.getVoices();
-    console.log(voices)
-    msg.voice = voices[getRandom(0, voices.length)];
-    msg.onend = function() {
-      finishedSpeaking();
-    }
-    window.speechSynthesis.speak(msg);
+    var englishVoices = responsiveVoice.getVoices().filter(function(voice) { return voice.name.match(/english/i)});
+    var voice = englishVoices[getRandom(0,englishVoices.length)];
+    var options = {
+        pitch: Math.random() * 0.8 + 0.6,
+	rate: Math.random() * 0.8 + 0.6,
+	onend: finishedSpeaking
+    } 
+    responsiveVoice.speak(word, voice.name, options);
   }
 
   function finishedSpeaking() {
