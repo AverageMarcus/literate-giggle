@@ -79,10 +79,14 @@
   document.getElementById('ready1').addEventListener('click', function() {
     myWord = document.getElementById('word').dataset.word1;
     channel.trigger('client-ready', {id:meId});
+    document.getElementById('ready1').classList.add('selected');
+    document.getElementById('ready2').attributes.disabled = 'disabled';
   });
   document.getElementById('ready1').addEventListener('click', function() {
     myWord = document.getElementById('word').dataset.word1;
     channel.trigger('client-ready', {id:meId});
+    document.getElementById('ready2').classList.add('selected');
+    document.getElementById('ready1').attributes.disabled = 'disabled';
   });
 
 </script>
