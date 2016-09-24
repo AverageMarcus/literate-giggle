@@ -32,7 +32,7 @@ p.info a {color:#FFEACC;}
 
 .page-audience {width:300px; margin:0px auto;}
 .page-audience button {width:240px; margin:0.5em auto;}
-.page-audience button.selected {width:240px; margin:0.5em auto;}
+.page-audience button.selected {background-color:#93C2B1;}
 
 /*
 colors
