@@ -66,8 +66,8 @@
     var englishVoices = responsiveVoice.getVoices().filter(function(voice) { return voice.name.match(/english/i)});
     var voice = englishVoices[getRandom(0,englishVoices.length)];
     var options = {
-        pitch: Math.random() * 0.8 + 0.6,
-	rate: Math.random() * 0.8 + 0.6,
+        pitch: Math.random() * 0.7 + 0.6,
+	rate: Math.random() * 0.7 + 0.6,
 	onend: finishedSpeaking
     } 
     responsiveVoice.speak(word, voice.name, options);
