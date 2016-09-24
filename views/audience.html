@@ -34,6 +34,8 @@
 <div id="pusher" data-key="{{PUSHKEY}}" data-thisurl="{{THIS_URL}}"></div>
 <div id="word" data-word1="{{word.word1}}" data-word2="{{word.word2}}" data-index="{{word.index}}"></div>
 
+<img src="/The_Raven.png" id="raven" style="display:none;position:absolute;top:0; height:100%;max-width: 100%;margin:0 auto;" />
+
 <script type="text/javascript">
   // pusher
   var pushConfig = document.getElementById('pusher').dataset;
@@ -63,6 +65,7 @@
   }
 
   function sayWord(word) {
+    document.getElementById('raven').style.display = 'block';
     var englishVoices = responsiveVoice.getVoices().filter(function(voice) { return voice.name.match(/english/i)});
     var voice = englishVoices[getRandom(0,englishVoices.length)];
     var options = {
@@ -74,6 +77,7 @@
   }
 
   function finishedSpeaking() {
+    document.getElementById('raven').style.display = 'none';
     channel.trigger('client-finished-speaking', {i:document.getElementById('word').dataset.index});
   }
 
