@@ -10,6 +10,8 @@ const htmling = require('htmling');
 const Pusher = require('pusher');
 
 const poem = require('./poem.json');
+const channel = 'presence-literate-giggle';
+let audience = [];
 
 app.use(express.static('public'));
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -51,6 +53,31 @@ app.post('/pusher/auth', (req, res) => {
     channelName,
     {user_id: socketId, user_info: {}})
   );
+});
+
+app.get('/channelhook', (req, res) => {
+  const webhook = pusher.webhook({
+    rawBody: JSON.stringify(req.body),
+    headers: req.headers
+  });
+
+  if(!webhook.isValid()) {
+    console.log('Invalid webhook');
+    return res.send(400);
+  } else {
+    res.send(200);
+  }
+
+  webhook.getEvents().forEach( e => {
+    if(e.channel === channel) {
+      if(e.name === 'member_added') {
+        audience.add(e.user_id);
+      }
+      if(e.name === 'member_removed') {
+        audience = audience.filter(a => a !== e.user_id);
+      }
+    }
+  });
 });
 
 app.listen(PORT, () => {
