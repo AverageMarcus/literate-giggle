@@ -44,7 +44,7 @@ app.get('/audience', (req, res) => {
   var thisUrl = req.protocol + '://' + req.get('host');
   req.THIS_URL = thisUrl;
   req.PUSHKEY = process.env.PUSHKEY;
-  req.word = { word: poem[currentPosition], index: currentPosition };
+  req.word = { word1: poem[0][currentPosition],  word2: poem[1][currentPosition], index: currentPosition };
   currentPosition++;
   res.render('audience', req);
 });

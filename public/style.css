@@ -2,33 +2,42 @@
 
 body {
   padding:2vh 2vw;
-  background-color: #222;
-  color: #efefef;
+  background-color: #3F324D;
+  color: #FFEACC;
   font-family: cursive;
   font-size: 100%;
   text-align: center;
 }
 
 h1, p, button {padding:0.5em;}
+h1 {padding-top: 0px;}
 
 button {
   display:block; margin:0px auto;
   padding:0.5em; width: 40vw;
-  background-color: purple;
+  background-color: #FF995E;
   border-radius: 20px;
-  font-family: cursive;
-  font-size: 2em; color:#efefef;
+  font-family: cursive; font-weight: bold;
+  font-size: 2em; color:#3F324D;
 }
 
-p.info {}
+p.info {font-size:1.6em;}
+p.info a {color:#FFEACC;}
 
 .page-index {}
 .page-index h1 {font-size: 2.6em;}
 .joined-dots {height:60vh; display:flex; justify-content: space-around;}
-.joined-dots i {display:block; height:30px; width:30px; border-radius:20px; background-color:red; margin:0.2em;}
-.joined-dots i.ready {background-color:green;}
+.joined-dots i {display:block; height:30px; width:30px; border-radius:20px; background-color:#FF995E; margin:0.2em;}
+.joined-dots i.ready {background-color:#93C2B1;}
 
 .page-audience {width:300px; margin:0px auto;}
-.page-audience button {
-  width:240px; margin:0.5em auto;
-}
+.page-audience button {width:240px; margin:0.5em auto;}
+.page-audience button.selected {background-color:#93C2B1;}
+
+/*
+colors
+black = #3F324D
+blue = #93C2B1
+cream = #FFEACC
+orange = #FF995E
+*/
