@@ -51,10 +51,10 @@
   // subscribe to channel
   var channel = pusher.subscribe('presence-literate-giggle');
   channel.bind('pusher:subscription_succeeded', function(members) {
-    myId = members.myID;
+    myId = members.me.id;
     members.each(function(member){
       // don't include ourself
-      if(member.id === members.myID) {
+      if(member.id === myId) {
         return
       } else {
        addMember(member.id, member.info);
