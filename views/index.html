@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="shortcut icon" href="favicon.ico" />
+
+  <!--meta content-->
+
+  <meta name="author" content="All the people">
+  <meta name="dcterms.rightsHolder" content="Built by People, United Kingdom, 2016">
+  <title>Crowd Sourced Story Telling</title>
+  <meta name="description" content="">
+
+  <link type="text/css" href="style.css" rel="stylesheet" media="screen" />
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pusher/3.0.0/pusher.min.js"></script>
+
+</head>
+
+<body>
+<div class="wrapper">
+<p class="info url-join">Join in! <a href="{{JOIN_URL}}" target="_blank">{{JOIN_URL}}</a></p>
+
+
+<p class="info creds">Made by <a href="http://twitter.com/rumyra">@rumyra</a> and <a href="http://twitter.com/">Marcus etc...</p>
+</div><!--wrapper-->
+<div id="pusher" data-key="{{PUSHKEY}}" data-thisurl="{{THIS_URL}}"></div>
+
+<script type="text/javascript">
+
+  // pusher
+  var pushConfig = document.getElementById('pusher').dataset;
+  var pusher = new Pusher(pushConfig.key, {encrypted:true, cluster:'eu'});
+  Pusher.channel_auth_endpoint = pushConfig.thisurl+'/pusher/auth';
+  pusher.connection.bind('state_change', function(states) {
+      console.log("Pusher's current state is " + states.current);
+  });
+  // subscribe to channel
+  var channel = pusher.subscribe('presence-story_channel');
+  channel.bind('pusher:subscription_succeeded', function(members) {
+
+    members.each(function(member){
+      // don't include ourself
+      if(member.id === members.myID) {
+        return
+      } else {
+       
+      }
+
+      // check that there is a client index on the user data
+      if(typeof(member.info.clientIndex) == 'undefined'){
+        return console.error("no clientIndex provided")
+      }
+    })
+  })
+  
+</script>
+
+</body>
+</html>
